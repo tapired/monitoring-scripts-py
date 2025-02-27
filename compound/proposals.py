@@ -123,5 +123,6 @@ def get_proposals():
         message = f"Failed to fetch compound proposals: {e}"
         send_telegram_message(message, PROTOCOL)
 
+
 if __name__ == "__main__":
     get_proposals()

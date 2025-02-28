@@ -62,16 +62,12 @@ def fetch_metric_from_gauntlet(max_retries=3):
                     last_updated = market_data["borrow"]["lastUpdated"]
                     if last_updated < get_timestamp_before(hours=6):
                         # don't accept data older than 6 hours
-                        alerts.append(
-                            f"🚨 Market is not updated for {market['key']} - last updated {last_updated}"
-                        )
+                        alerts.append(f"🚨 Market is not updated for {market['key']} - last updated {last_updated}")
                         break
 
                     borrow_amount = market_data["borrow"]["amount"]
                     supply_amount = market_data["supply"]["amount"]
-                    debt_supply_ratio = (
-                        borrow_amount / supply_amount if supply_amount > 0 else 0
-                    )
+                    debt_supply_ratio = borrow_amount / supply_amount if supply_amount > 0 else 0
                     if debt_supply_ratio > DEBT_SUPPLY_RATIO:
                         alerts.append(
                             f"🚨 High Debt/Supply Ratio Alert:\n"
@@ -114,9 +110,7 @@ def fetch_metric_from_gauntlet(max_retries=3):
 
         except requests.RequestException as e:
             if attempt == max_retries - 1:  # Last attempt
-                print(
-                    f"🚨 Error fetching Gauntlet metrics after {max_retries} attempts: {str(e)}"
-                )
+                print(f"🚨 Error fetching Gauntlet metrics after {max_retries} attempts: {str(e)}")
                 return False
             print(f"Attempt {attempt + 1} failed, retrying...")
             continue
@@ -189,10 +183,7 @@ def check_thresholds(metrics):
     # Check bad debt ratio
     if bad_debt_ratio > BAD_DEBT_RATIO:
         alerts.append(
-            f"🚨 High Bad Debt Alert:\n"
-            f"💀 Bad Debt Ratio: {bad_debt_ratio:.2%}\n"
-            f"💰 Bad Debt: ${bad_debt:,.2f}\n"
-            f"📊 TVL: ${tvl:,.2f}"
+            f"🚨 High Bad Debt Alert:\n💀 Bad Debt Ratio: {bad_debt_ratio:.2%}\n💰 Bad Debt: ${bad_debt:,.2f}\n📊 TVL: ${tvl:,.2f}"
         )
 
     # Check debt/supply ratio
